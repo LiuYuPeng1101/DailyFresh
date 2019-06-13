@@ -1,22 +1,53 @@
 # DailyFresh
   这是用beego开发的web网站，初次使用beego的开发人员可以直接下载运行代码，下面是网站的一些截图，包含的功能模块及模块的内容
-  ## 网站截图
-  注册页面：
-  ![image](https://github.com/LiuYuPeng1101/DailyFresh/blob/dev/image--show/%E6%B3%A8%E5%86%8C.jpg)
-  登录页面：
-  ![image](https://github.com/LiuYuPeng1101/DailyFresh/blob/dev/image--show/%E7%99%BB%E5%BD%95.jpg)
-  网站首页：
-  ![image](https://github.com/LiuYuPeng1101/DailyFresh/blob/dev/image--show/%E9%A6%96%E9%A1%B5.jpg)
-  商品详情页：
-  ![image](https://github.com/LiuYuPeng1101/DailyFresh/blob/dev/image--show/%E5%95%86%E5%93%81%E8%AF%A6%E6%83%85%E9%A1%B5.jpg)
-  用户中心：
-  ![image](https://github.com/LiuYuPeng1101/DailyFresh/blob/dev/image--show/%E7%94%A8%E6%88%B7%E4%B8%AD%E5%BF%83.jpg)
-  我的购物车：
-  ![image](https://github.com/LiuYuPeng1101/DailyFresh/blob/dev/image--show/%E6%88%91%E7%9A%84%E8%B4%AD%E7%89%A9%E8%BD%A6.jpg)
   ## 需求分析：
+     此网站共包括5个功能模块，分别是：用户模块、商品模块、购物车模块、订单模块、后台模块.
   ### 用户模块：
   * 注册页
-    *注册时校验用户名是否已被注册。
-    *完成用户信息的注册。
-    *邮箱验证。
-
+    * 注册时校验用户名是否已被注册。
+    * 完成用户信息的注册。
+    * 邮箱验证。
+    * 注册页面展示：
+  ![image](https://github.com/LiuYuPeng1101/DailyFresh/blob/dev/image--show/%E6%B3%A8%E5%86%8C.jpg)
+  * 登录页
+    * 实现用户的登录功能。
+    * 登录页面：
+  ![image](https://github.com/LiuYuPeng1101/DailyFresh/blob/dev/image--show/%E7%99%BB%E5%BD%95.jpg) 
+  * 用户中心
+    * 用户中心信息页：显示登录用户的信息，包括用户名、电话和地址，同时页面下方显示出用户最近浏览的商品信息。
+    * 用户中心地址页：显示登录用户的默认收件地址，页面下方的表单可以新增用户的收货地址。
+    * 用户中心订单页：显示登录用户的订单信息。
+    * 用户中心页展示：
+  ![image](https://github.com/LiuYuPeng1101/DailyFresh/blob/dev/image--show/%E7%94%A8%E6%88%B7%E4%B8%AD%E5%BF%83.jpg)  
+  * 其它
+    * 如果用户已经登录，页面顶部显示登录用户的信息。
+  ### 商品模块
+  * 首页
+    * 动态指定首页轮播商品信息。
+    * 动态指定首页活动信息。
+    * 动态获取商品的种类信息并显示。
+    * 动态指定首页显示的每个种类的商品(包括图片商品和文字商品)。
+    * 点击某一个商品时跳转到商品的详情页面。
+  * 商品详情页
+    * 显示出某个商品的详情信息。
+    * 页面的左下方显示出该种类商品的2个新品信息。
+    * 商品详情页面展示：
+  ![image](https://github.com/LiuYuPeng1101/DailyFresh/blob/dev/image--show/%E5%95%86%E5%93%81%E8%AF%A6%E6%83%85%E9%A1%B5.jpg) 
+  * 商品列表页
+    * 显示出某一个种类商品的列表数据，分页显示并支持按照默认、价格、和人气进行排序。
+    * 页面的左下方显示出该种类商品的2个新品信息。
+  * 其他
+    * 通过页面搜索框搜索商品信息。
+  ### 购物车模块
+  * 列表页和详情页将商品添加到购物车。
+  * 用户登录后，首页，详情页，列表页显示登录用户购物车中商品的数目。
+  * 购物车页面：对用户购物车中商品的操作。如选择某件商品，增加或减少购物车中商品的数目。
+  * 购物车页面展示：
+ ![image](https://github.com/LiuYuPeng1101/DailyFresh/blob/dev/image--show/%E6%88%91%E7%9A%84%E8%B4%AD%E7%89%A9%E8%BD%A6.jpg)
+  ### 订单模块
+  * 提交订单页面：显示用户准备购买的商品信息。
+  * 点击提交订单完成订单的创建。
+  * 用户中心订单页显示用户的订单信息。
+  * 点击支付完成订单的支付。
+  ### 后台模块
+  * 对商品进行管理(增加，删除，编辑).
