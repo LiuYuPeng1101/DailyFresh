@@ -1,0 +1,268 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>天天生鲜-购物车</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/reset.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/main.css">
+	<script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
+	<script type="text/javascript" src="/static/js/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="/static/js/slide.js"></script>
+</head>
+<body>
+<div class="header_con">
+	<div class="header">
+		<div class="welcome fl">欢迎来到天天生鲜!</div>
+		<div class="fr">
+			{{if compare .username ""}}
+				<div class="login_btn fl">
+					<a href="/Login">登录</a>
+					<span>|</span>
+					<a href="/Register">注册</a>
+				</div>
+			{{else}}
+				<div class="login_btn fl">
+					欢迎您：<em>{{.username}}</em>
+					<span>|</span>
+					<a href="/User/Logout">退出</a>
+				</div>
+			{{end}}
+			<div class="user_link fl">
+				<span>|</span>
+				<a href="/User/user_center_info.html">用户中心</a>
+				<span>|</span>
+				<a href="/User/Cart">我的购物车</a>
+				<span>|</span>
+				<a href="/User/user_center_order.html">我的订单</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="search_bar clearfix">
+	<a href="index.html" class="logo fl"><img src="/static/images/logo.png"></a>
+	<div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;用户中心</div>
+	<div class="search_con fr">
+		<input type="text" class="input_text fl" name="" placeholder="搜索商品">
+		<input type="button" class="input_btn fr" name="" value="搜索">
+	</div>
+</div>
+
+
+
+	<div class="total_count">全部商品<em>{{.TotalCount}}</em>件</div>
+	<ul class="cart_list_th clearfix">
+		<li class="col01">商品名称</li>
+		<li class="col02">商品单位</li>
+		<li class="col03">商品价格</li>
+		<li class="col04">数量</li>
+		<li class="col05">小计</li>
+		<li class="col06">操作</li>
+	</ul>
+	<form action="/User/ShowOrder" method="post">
+	{{range .Goods}}
+		<ul class="cart_list_td clearfix">
+			<li class="col01"><input type="checkbox" name="skuid" checked="" value="{{.Goods.Id}}"></li>
+			<li class="col02"><img src="http://172.16.107.175:8888/{{.Goods.Image}}"></li>
+			<li class="col03">{{.Goods.Name}}<br><em>{{.Goods.Price}}元/{{.Goods.Unite}}</em></li>
+			<li class="col04">{{.Goods.Unite}}</li>
+			<li class="col05">{{.Goods.Price}}元</li>
+			<li class="col06">
+				<div class="num_add">
+					<a href="javascript:;" class="add fl">+</a>
+					<input type="text" class="num_show fl" skuid="{{.Goods.Id}}"value="{{.Count}}">
+					<a href="javascript:;" class="minus fl">-</a>
+				</div>
+			</li>
+			<li class="col07">{{.addPrice}}元</li>
+			<li class="col08"><a href="javascript:;" class="deleteCart" skuid="{{.Goods.Id}}">删除</a></li>
+		</ul>
+	{{end}}
+
+	<ul class="settlements">
+		<li class="col01"><input type="checkbox" name="" checked=""></li>
+		<li class="col02">全选</li>
+		<li class="col03">合计(不含运费)：<span>¥</span><em>{{.TotalPrice}}</em><br>共计<b>{{.TotalCount}}</b>件商品</li>
+		<li class="col04"><input type="submit" value="去结算" name=""></li>
+	</ul>
+	</form>
+
+	<div class="footer">
+		<div class="foot_link">
+			<a href="#">关于我们</a>
+			<span>|</span>
+			<a href="#">联系我们</a>
+			<span>|</span>
+			<a href="#">招聘人才</a>
+			<span>|</span>
+			<a href="#">友情链接</a>		
+		</div>
+		<p>CopyRight © 2016 北京天天生鲜信息技术有限公司 All Rights Reserved</p>
+		<p>电话：010-****888    京ICP备*******8号</p>
+	</div>
+	
+</body>
+</html>
+
+<script type="text/javascript">
+	function UpdataTotalPrice() {
+		TotalPrice = 0;
+		TotalCount = 0;
+		$('.cart_list_td').find(':checked').parents('ul').each(function () {
+			count=$(this).find('.num_show').val();
+			price=$(this).children('.col07').text();
+			count=parseInt(count);
+			price=parseFloat(price);
+			TotalCount+=count;
+			TotalPrice+=price;
+		});
+		$('.settlements').children('.col03').children('em').text(TotalPrice);
+		$('.settlements').children('.col03').children('b').text(TotalCount);
+		$('.total_count').children('em').text(TotalCount);
+	}
+	//设置全选或者全不选状态
+	$('.settlements').find(':checkbox').change(function () {
+		is_check=$(this).prop('checked')
+		$('.cart_list_td').find(':checkbox').each(function () {
+			$(this).prop('checked',is_check)
+		})
+		UpdataTotalPrice()
+	})
+	//根据商品的状态设置全选状态
+	$('.cart_list_td').find(':checkbox').change(function () {
+		checkboxlength=$('.cart_list_td').find(':checkbox').length
+		checkedlength=$('.cart_list_td').find(':checked').length
+		if (checkboxlength > checkedlength){
+			$('.settlements').find(':checkbox').prop('checked',"")
+		}else{
+			$('.settlements').find(':checkbox').prop('checked',"checked")
+		}
+		UpdataTotalPrice()
+	})
+	//改变商品的数量
+	$('.add').click(function () {
+		count=$(this).next().val()
+		skuid=$(this).next().attr("skuid")
+		count=parseInt(count) + 1
+		parm={"skuid":skuid,"count":count}
+		errUpdate = false
+        $.ajaxSettings.async = false
+		$.post("/User/UpdateCart",parm,function(data){
+			if (data.code == 5){
+                errUpdate = false
+			}else{
+                errUpdate = true
+				alert(data.msg)
+			}
+		})
+        $.ajaxSettings.async = true
+        if (!errUpdate){
+            $(this).next().val(count)
+			//更新小计
+			price=$(this).parents('ul').children('.col05').text()
+			price=parseFloat(price)
+			amout=price * count
+			$(this).parents('ul').children('.col07').text(amout.toFixed(2)+"元")
+        }
+        //不选中商品计算总价
+		ischecked=$(this).parents('ul').find(':checkbox').prop('checked')
+		if (ischecked){
+			UpdataTotalPrice()
+		}
+	})
+	$('.minus').click(function () {
+		count=$(this).prev().val()
+		count=parseInt(count) - 1
+		if (count < 1){
+			count=1
+			$(this).prev().val(count)
+			return
+		}
+		skuid=$(this).prev().attr("skuid")
+		parm={"skuid":skuid,"count":count}
+		errUpdate = false
+		$.ajaxSettings.async = false
+		$.post("/User/UpdateCart",parm,function(data){
+			if (data.code == 5){
+				errUpdate = false
+			}else{
+				errUpdate = true
+				alert(data.msg)
+			}
+		})
+		$.ajaxSettings.async = true
+		if (!errUpdate){
+			$(this).prev().val(count)
+			//更新小计
+			price=$(this).parents('ul').children('.col05').text()
+			price=parseFloat(price)
+			amout=price * count
+			$(this).parents('ul').children('.col07').text(amout.toFixed(2)+'元')
+		}
+		//不选中商品计算总价
+		ischecked=$(this).parents('ul').find(':checkbox').prop('checked')
+		if (ischecked){
+			UpdataTotalPrice()
+		}
+	})
+	$('.num_show').focus(function () {
+		Precount=$('num_show').val()
+	})
+	$('.num_show').blur(function () {
+		count=$(this).val()
+		if (isNaN(count) || count.trim().length == 0 || parseInt(count) < 0){
+			count=Precount
+			$(this).val(count)
+			return
+		}
+		skuid=$(this).attr("skuid")
+		parm={"skuid":skuid,"count":count}
+		errUpdate = false
+		$.ajaxSettings.async = false
+		$.post("/User/UpdateCart",parm,function(data){
+			if (data.code == 5){
+				errUpdate = false
+			}else{
+				errUpdate = true
+				alert(data.msg)
+			}
+		})
+		$.ajaxSettings.async = true
+		if (!errUpdate){
+			$(this).val(count)
+			//更新小计
+			price=$(this).parents('ul').children('.col05').text()
+			price=parseFloat(price)
+			amout=price * count
+			$(this).parents('ul').children('.col07').text(amout.toFixed(2)+'元')
+		}
+		//不选中商品计算总价
+		ischecked=$(this).parents('ul').find(':checkbox').prop('checked')
+		if (ischecked) {
+			UpdataTotalPrice()
+		}
+
+	})
+	//删除商品
+	$('.deleteCart').click(function () {
+		skuid=$(this).attr('skuid')
+		parm={"skuid":skuid}
+		$.ajaxSettings.async = false
+		$.post("/User/DeleteCart",parm,function (data) {
+			if (data.code == 5){
+				errUpdate = false
+			}else{
+				errUpdate = true
+				alert(data.msg)
+			}
+		})
+		$.ajaxSettings.async = true
+		if (!errUpdate){
+			$(this).parents('ul').remove()
+		}
+		ischecked=$(this).parents('ul').find(':checkbox').prop('checked')
+		if (ischecked) {
+			UpdataTotalPrice()
+		}
+	})
+</script>
